@@ -4,7 +4,17 @@ import java.util.List;
 
 public interface Api {
 
-    List<Cat> queryCats(String cats);
+    interface CatsQueryCallback {
+        void onCatListReceived(List<Cat> cats);
+        void onQueryFailed(Exception e);
+    }
 
-    Uri store(Cat cat);
+    interface StoreCallback {
+        void onCatStored(Uri uri);
+        void onStoredFailed(Exception e);
+    }
+
+    void queryCats(String query, CatsQueryCallback callback);
+
+    void store(Cat cat, StoreCallback callback);
 }

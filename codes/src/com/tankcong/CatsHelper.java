@@ -12,6 +12,11 @@ public class CatsHelper {
 
     Api api;
 
+    interface CuttestCatCallback {
+        void onCuttestCatSaved(Uri uri);
+        void onError(Exception e);
+    }
+
     private static CatsHelper helper = null;
 
     private CatsHelper() {
@@ -25,15 +30,30 @@ public class CatsHelper {
         return helper;
     }
 
-    public Uri saveTheCuttestCat(String query) {
-        try {
-            List<Cat> cats = api.queryCats(query);
-            Cat cuttestCat = findCuttest(cats);
-            Uri savedUri = api.store(cuttestCat);
-            return savedUri;
-        } catch (Exception e) {
-            return new Uri("empty");
-        }
+    public void saveTheCuttestCat(String query, CuttestCatCallback callback) {
+            api.queryCats(query, new Api.CatsQueryCallback() {
+
+                @Override
+                public void onCatListReceived(List<Cat> cats) {
+                    Cat cuttestCat = findCuttest(cats);
+                    api.store(cuttestCat, new Api.StoreCallback() {
+                        @Override
+                        public void onCatStored(Uri uri) {
+                            callback.onCuttestCatSaved(uri);
+                        }
+
+                        @Override
+                        public void onStoredFailed(Exception e) {
+                            callback.onError(e);
+                        }
+                    });
+                }
+
+                @Override
+                public void onQueryFailed(Exception e) {
+                    callback.onError(e);
+                }
+            });
     }
 
     private Cat findCuttest(List<Cat> cats) {
