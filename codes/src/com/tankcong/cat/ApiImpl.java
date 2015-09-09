@@ -8,13 +8,17 @@ public class ApiImpl implements Api {
     @Override
     public void queryCats(String query, CatsQueryCallback callback) {
         // should be async
-        List<Cat> cats = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            cats.add(new Cat());
+        try {
+            List<Cat> cats = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                cats.add(new Cat());
+            }
+            System.out.println(cats);
+            // sync
+            callback.onCatListReceived(cats);
+        } catch (Exception e) {
+            callback.onQueryFailed(e);
         }
-        System.out.println(cats);
-        // sync
-        callback.onCatListReceived(cats);
     }
 
     @Override
