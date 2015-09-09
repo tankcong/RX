@@ -24,8 +24,12 @@ public class ApiImpl implements Api {
     @Override
     public void store(Cat cat, StoreCallback callback) {
         // should be async
-        Uri uri = new Uri(cat.toString());
-        // sync
-        callback.onCatStored(uri);
+        try {
+            Uri uri = new Uri(cat.toString());
+            callback.onCatStored(uri);
+        } catch (Exception e) {
+            // sync
+            callback.onStoredFailed(e);
+        }
     }
 }
