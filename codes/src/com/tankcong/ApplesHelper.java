@@ -1,37 +1,37 @@
 package com.tankcong;
 
-import com.tankcong.cat.*;
+import com.tankcong.api.*;
 
 import java.util.Collections;
 import java.util.List;
 
-public class CatsHelper {
+public class ApplesHelper {
 
     ApiWrapper apiWrapper;
 
-    private static CatsHelper helper = null;
+    private static ApplesHelper helper = null;
 
-    private CatsHelper() {
+    private ApplesHelper() {
         apiWrapper = new ApiWrapper();
     }
 
-    public static CatsHelper getInstance() {
+    public static ApplesHelper getInstance() {
         if (helper == null) {
-            helper = new CatsHelper();
+            helper = new ApplesHelper();
         }
         return helper;
     }
 
-    public AsyncJob<Uri> saveTheCuttestCat(String query) {
-        AsyncJob<List<Cat>> queryListJob = apiWrapper.queryCats(query);
-        AsyncJob<Cat> findCutestJob = new AsyncJob<Cat>() {
+    public AsyncJob<Uri> saveTheBiggestApple(String query) {
+        AsyncJob<List<Apple>> queryListJob = apiWrapper.queryApples(query);
+        AsyncJob<Apple> findBiggestJob = new AsyncJob<Apple>() {
             @Override
-            public void start(Callback<Cat> callback) {
-                queryListJob.start(new Callback<List<Cat>>() {
+            public void start(Callback<Apple> callback) {
+                queryListJob.start(new Callback<List<Apple>>() {
                     @Override
-                    public void onResult(List<Cat> result) {
-                        Cat cat = findCuttest(result);
-                        callback.onResult(cat);
+                    public void onResult(List<Apple> result) {
+                        Apple apple = findBiggest(result);
+                        callback.onResult(apple);
                     }
 
                     @Override
@@ -44,9 +44,9 @@ public class CatsHelper {
         AsyncJob<Uri> storeJob = new AsyncJob<Uri>() {
             @Override
             public void start(Callback<Uri> callback) {
-                findCutestJob.start(new Callback<Cat>() {
+                findBiggestJob.start(new Callback<Apple>() {
                     @Override
-                    public void onResult(Cat result) {
+                    public void onResult(Apple result) {
                         apiWrapper.store(result).start(callback);
                     }
 
@@ -60,7 +60,7 @@ public class CatsHelper {
         return storeJob;
     }
 
-    private Cat findCuttest(List<Cat> cats) {
-        return Collections.max(cats);
+    private Apple findBiggest(List<Apple> apples) {
+        return Collections.max(apples);
     }
 }

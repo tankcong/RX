@@ -1,4 +1,4 @@
-package com.tankcong.cat;
+package com.tankcong.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,27 +6,27 @@ import java.util.List;
 public class ApiImpl implements Api {
 
     @Override
-    public void queryCats(String query, CatsQueryCallback callback) {
+    public void queryApples(String query, ApplesQueryCallback callback) {
         // should be async
         try {
-            List<Cat> cats = new ArrayList<>();
+            List<Apple> apples = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                cats.add(new Cat());
+                apples.add(new Apple());
             }
-            System.out.println(cats);
+            System.out.println(apples);
             // sync
-            callback.onCatListReceived(cats);
+            callback.onAppleListReceived(apples);
         } catch (Exception e) {
             callback.onQueryFailed(e);
         }
     }
 
     @Override
-    public void store(Cat cat, StoreCallback callback) {
+    public void store(Apple apple, StoreCallback callback) {
         // should be async
         try {
-            Uri uri = new Uri(cat.toString());
-            callback.onCatStored(uri);
+            Uri uri = new Uri(apple.toString());
+            callback.onAppleStored(uri);
         } catch (Exception e) {
             // sync
             callback.onStoredFailed(e);
