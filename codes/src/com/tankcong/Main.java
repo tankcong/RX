@@ -1,6 +1,7 @@
 package com.tankcong;
 
 
+import com.tankcong.cat.AsyncJob;
 import com.tankcong.cat.Callback;
 import com.tankcong.cat.Uri;
 
@@ -10,15 +11,16 @@ public class Main {
 
         CatsHelper helper = CatsHelper.getInstance();
 
-        helper.saveTheCuttestCat("query", new Callback<Uri>() {
+        AsyncJob<Uri> storeJob = helper.saveTheCuttestCat("query");
+        storeJob.start(new Callback<Uri>() {
             @Override
-            public void onResult(Uri uri) {
-                System.out.println(uri);
+            public void onResult(Uri result) {
+                System.out.println(result);
             }
 
             @Override
             public void onError(Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         });
     }

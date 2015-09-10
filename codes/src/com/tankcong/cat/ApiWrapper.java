@@ -10,32 +10,42 @@ public class ApiWrapper {
         api = new ApiImpl();
     }
 
-    public void queryCats(String query, Callback<List<Cat>> callback) {
-        api.queryCats(query, new Api.CatsQueryCallback() {
+    public AsyncJob<List<Cat>> queryCats(String query) {
+        return new AsyncJob<List<Cat>>() {
             @Override
-            public void onCatListReceived(List<Cat> cats) {
-                callback.onResult(cats);
-            }
+            public void start(Callback<List<Cat>> callback) {
+                api.queryCats(query, new Api.CatsQueryCallback() {
+                    @Override
+                    public void onCatListReceived(List<Cat> cats) {
+                        callback.onResult(cats);
+                    }
 
-            @Override
-            public void onQueryFailed(Exception e) {
-                callback.onError(e);
+                    @Override
+                    public void onQueryFailed(Exception e) {
+                        callback.onError(e);
+                    }
+                });
             }
-        });
+        };
     }
 
-    public void store(Cat cat, Callback<Uri> callback) {
-        api.store(cat, new Api.StoreCallback() {
+    public AsyncJob<Uri> store(Cat cat) {
+        return new AsyncJob<Uri>() {
             @Override
-            public void onCatStored(Uri uri) {
-                callback.onResult(uri);
-            }
+            public void start(Callback<Uri> callback) {
+                api.store(cat, new Api.StoreCallback() {
+                    @Override
+                    public void onCatStored(Uri uri) {
+                        callback.onResult(uri);
+                    }
 
-            @Override
-            public void onStoredFailed(Exception e) {
-                callback.onError(e);
+                    @Override
+                    public void onStoredFailed(Exception e) {
+                        callback.onError(e);
+                    }
+                });
             }
-        });
+        };
     }
 
 }

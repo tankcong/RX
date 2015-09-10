@@ -22,20 +22,42 @@ public class CatsHelper {
         return helper;
     }
 
-    public void saveTheCuttestCat(String query, Callback<Uri> callback) {
-        apiWrapper.queryCats(query, new Callback<List<Cat>>() {
+    public AsyncJob<Uri> saveTheCuttestCat(String query) {
+        AsyncJob<List<Cat>> queryListJob = apiWrapper.queryCats(query);
+        AsyncJob<Cat> findCutestJob = new AsyncJob<Cat>() {
             @Override
-            public void onResult(List<Cat> result) {
-                Cat cutestCat = findCuttest(result);
-                apiWrapper.store(cutestCat, callback);
-            }
+            public void start(Callback<Cat> callback) {
+                queryListJob.start(new Callback<List<Cat>>() {
+                    @Override
+                    public void onResult(List<Cat> result) {
+                        Cat cat = findCuttest(result);
+                        callback.onResult(cat);
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+                        callback.onError(e);
+                    }
+                });
+            }
+        };
+        AsyncJob<Uri> storeJob = new AsyncJob<Uri>() {
             @Override
-            public void onError(Exception e) {
-                callback.onError(e);
-            }
-        });
+            public void start(Callback<Uri> callback) {
+                findCutestJob.start(new Callback<Cat>() {
+                    @Override
+                    public void onResult(Cat result) {
+                        apiWrapper.store(result).start(callback);
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+                        callback.onError(e);
+                    }
+                });
+            }
+        };
+        return storeJob;
     }
 
     private Cat findCuttest(List<Cat> cats) {
