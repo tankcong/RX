@@ -1,7 +1,6 @@
 package com.tankcong;
 
 import com.tankcong.cat.*;
-import com.tankcong.rx.Func;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,25 +23,17 @@ public class CatsHelper {
     }
 
     public AsyncJob<Uri> saveTheCuttestCat(String query) {
+
         AsyncJob<List<Cat>> queryListJob = apiWrapper.queryCats(query);
 
-        AsyncJob<Cat> findCutestJob = queryListJob.map(new Func<List<Cat>, Cat>() {
-            @Override
-            public Cat call(List<Cat> cats) {
-                return findCuttest(cats);
-            }
-        });
+        AsyncJob<Cat> findCutestJob = queryListJob.map(cats -> findCuttest(cats));
 
-        AsyncJob<Uri> storeJob = findCutestJob.flatMap(new Func<Cat, AsyncJob<Uri>>() {
-            @Override
-            public AsyncJob<Uri> call(Cat cat) {
-                return apiWrapper.store(cat);
-            }
-        });
+        AsyncJob<Uri> storeJob = findCutestJob.flatMap(cat -> apiWrapper.store(cat));
+
        return storeJob;
     }
 
-    private Cat findCuttest(List<Cat> cats) {
+    public Cat findCuttest(List<Cat> cats) {
         return Collections.max(cats);
     }
 }

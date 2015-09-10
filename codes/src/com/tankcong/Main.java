@@ -9,6 +9,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+
+    }
+
+    void start() {
         CatsHelper helper = CatsHelper.getInstance();
 
         AsyncJob<Uri> storeJob = helper.saveTheCuttestCat("query");
@@ -24,4 +28,9 @@ public class Main {
             }
         });
     }
+
+    void startRX() {
+        CatsHelperRX helper = CatsHelperRX.getInstance();
+    }
+
 }

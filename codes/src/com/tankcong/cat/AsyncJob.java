@@ -1,7 +1,5 @@
 package com.tankcong.cat;
 
-import com.tankcong.rx.Func;
-
 public abstract class AsyncJob<T> {
 
     public abstract void start(Callback<T> callback);
