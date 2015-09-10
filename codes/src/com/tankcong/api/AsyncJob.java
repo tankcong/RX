@@ -1,6 +1,6 @@
-package com.tankcong.cat;
+package com.tankcong.api;
 
-import com.tankcong.rx.Func;
+import com.tankcong.api.rx.Func;
 
 public abstract class AsyncJob<T> {
 

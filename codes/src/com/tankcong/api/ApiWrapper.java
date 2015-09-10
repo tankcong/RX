@@ -1,4 +1,4 @@
-package com.tankcong.cat;
+package com.tankcong.api;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ public class ApiWrapper {
         api = new ApiImpl();
     }
 
-    public AsyncJob<List<Cat>> queryCats(String query) {
-        return new AsyncJob<List<Cat>>() {
+    public AsyncJob<List<Apple>> queryApples(String query) {
+        return new AsyncJob<List<Apple>>() {
             @Override
-            public void start(Callback<List<Cat>> callback) {
-                api.queryCats(query, new Api.CatsQueryCallback() {
+            public void start(Callback<List<Apple>> callback) {
+                api.queryApples(query, new Api.AppleQueryCallback() {
                     @Override
-                    public void onCatListReceived(List<Cat> cats) {
-                        callback.onResult(cats);
+                    public void onAppleListReceived(List<Apple> apples) {
+                        callback.onResult(apples);
                     }
 
                     @Override
@@ -29,13 +29,13 @@ public class ApiWrapper {
         };
     }
 
-    public AsyncJob<Uri> store(Cat cat) {
+    public AsyncJob<Uri> store(Apple apple) {
         return new AsyncJob<Uri>() {
             @Override
             public void start(Callback<Uri> callback) {
-                api.store(cat, new Api.StoreCallback() {
+                api.store(apple, new Api.StoreCallback() {
                     @Override
-                    public void onCatStored(Uri uri) {
+                    public void onAppleStored(Uri uri) {
                         callback.onResult(uri);
                     }
 
