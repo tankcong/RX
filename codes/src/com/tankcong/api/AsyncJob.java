@@ -1,4 +1,4 @@
-package com.tankcong.cat;
+package com.tankcong.api;
 
 public abstract class AsyncJob<T> {
 

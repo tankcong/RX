@@ -1,9 +1,9 @@
 package com.tankcong;
 
 
-import com.tankcong.cat.AsyncJob;
-import com.tankcong.cat.Callback;
-import com.tankcong.cat.Uri;
+import com.tankcong.api.AsyncJob;
+import com.tankcong.api.Callback;
+import com.tankcong.api.Uri;
 
 public class Main {
 
@@ -13,9 +13,9 @@ public class Main {
     }
 
     void start() {
-        CatsHelper helper = CatsHelper.getInstance();
+        ApplesHelper helper = ApplesHelper.getInstance();
 
-        AsyncJob<Uri> storeJob = helper.saveTheCuttestCat("query");
+        AsyncJob<Uri> storeJob = helper.saveTheBiggestApple("query");
         storeJob.start(new Callback<Uri>() {
             @Override
             public void onResult(Uri result) {
@@ -30,7 +30,7 @@ public class Main {
     }
 
     void startRX() {
-        CatsHelperRX helper = CatsHelperRX.getInstance();
+        ApplesHelperRX helper = ApplesHelperRX.getInstance();
     }
 
 }

@@ -1,6 +1,6 @@
-package com.tankcong.rx;
+package com.tankcong.api.rx;
 
-import com.tankcong.cat.*;
+import com.tankcong.api.*;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -14,14 +14,14 @@ public class ApiWrapperRX {
         api = new ApiImpl();
     }
 
-    public Observable<List<Cat>> queryCats(String query) {
-        return Observable.create(new Observable.OnSubscribe<List<Cat>>() {
+    public Observable<List<Apple>> queryApples(String query) {
+        return Observable.create(new Observable.OnSubscribe<List<Apple>>() {
             @Override
-            public void call(Subscriber<? super List<Cat>> subscriber) {
-                api.queryCats(query, new Api.CatsQueryCallback() {
+            public void call(Subscriber<? super List<Apple>> subscriber) {
+                api.queryApples(query, new Api.ApplesQueryCallback() {
                     @Override
-                    public void onCatListReceived(List<Cat> cats) {
-                        subscriber.onNext(cats);
+                    public void onAppleListReceived(List<Apple> apples) {
+                        subscriber.onNext(apples);
                     }
 
                     @Override
@@ -33,13 +33,13 @@ public class ApiWrapperRX {
         });
     }
 
-    public Observable<Uri> store(Cat cat) {
+    public Observable<Uri> store(Apple apple) {
         return Observable.create(new Observable.OnSubscribe<Uri>() {
             @Override
             public void call(Subscriber<? super Uri> subscriber) {
-                api.store(cat, new Api.StoreCallback() {
+                api.store(apple, new Api.StoreCallback() {
                     @Override
-                    public void onCatStored(Uri uri) {
+                    public void onAppleStored(Uri uri) {
                         subscriber.onNext(uri);
                     }
 
