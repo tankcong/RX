@@ -1,16 +1,16 @@
 package com.tankcong;
 
 
-import com.tankcong.cat.Callback;
-import com.tankcong.cat.Uri;
+import com.tankcong.api.Callback;
+import com.tankcong.api.Uri;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        CatsHelper helper = CatsHelper.getInstance();
+        ApplesHelper helper = ApplesHelper.getInstance();
 
-        helper.saveTheCuttestCat("query", new Callback<Uri>() {
+        helper.saveTheBiggestApple("query", new Callback<Uri>() {
             @Override
             public void onResult(Uri uri) {
                 System.out.println(uri);
