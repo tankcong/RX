@@ -1,6 +1,7 @@
 package com.tankcong;
 
 import com.tankcong.cat.*;
+import com.tankcong.rx.Func;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,40 +25,21 @@ public class CatsHelper {
 
     public AsyncJob<Uri> saveTheCuttestCat(String query) {
         AsyncJob<List<Cat>> queryListJob = apiWrapper.queryCats(query);
-        AsyncJob<Cat> findCutestJob = new AsyncJob<Cat>() {
-            @Override
-            public void start(Callback<Cat> callback) {
-                queryListJob.start(new Callback<List<Cat>>() {
-                    @Override
-                    public void onResult(List<Cat> result) {
-                        Cat cat = findCuttest(result);
-                        callback.onResult(cat);
-                    }
 
-                    @Override
-                    public void onError(Exception e) {
-                        callback.onError(e);
-                    }
-                });
-            }
-        };
-        AsyncJob<Uri> storeJob = new AsyncJob<Uri>() {
+        AsyncJob<Cat> findCutestJob = queryListJob.map(new Func<List<Cat>, Cat>() {
             @Override
-            public void start(Callback<Uri> callback) {
-                findCutestJob.start(new Callback<Cat>() {
-                    @Override
-                    public void onResult(Cat result) {
-                        apiWrapper.store(result).start(callback);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        callback.onError(e);
-                    }
-                });
+            public Cat call(List<Cat> cats) {
+                return findCuttest(cats);
             }
-        };
-        return storeJob;
+        });
+
+        AsyncJob<Uri> storeJob = findCutestJob.flatMap(new Func<Cat, AsyncJob<Uri>>() {
+            @Override
+            public AsyncJob<Uri> call(Cat cat) {
+                return apiWrapper.store(cat);
+            }
+        });
+       return storeJob;
     }
 
     private Cat findCuttest(List<Cat> cats) {
